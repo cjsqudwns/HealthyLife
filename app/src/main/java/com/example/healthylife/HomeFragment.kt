@@ -8,20 +8,26 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
+
     var category = arrayListOf<String>("운동 부위 별", "식단 성분 별")
     var exerciseArea = arrayListOf<String>("전신", "가슴", "등", "어깨",
         "하체", "팔", "유산소", "복근", "기타")
     var nutrient = arrayListOf<String>("탄수화물", "단백질", "지방")
     var binding: FragmentHomeBinding ?=null
+
+    var itemArr = arrayListOf<String>("아메리카노", "카페라떼", "카푸치노")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         initSpinner()
+        initRecyclerView()
         return binding!!.root
     }
 
@@ -49,6 +55,12 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
+    fun initRecyclerView(){
+        if (view is RecyclerView){
+            with(view){
+            }
+        }
     }
 
     override fun onDestroyView() {
