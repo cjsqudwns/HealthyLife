@@ -29,20 +29,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinnerType1"
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addExerciseBtn" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinnerType2"
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addDietBtn" />
 
@@ -54,5 +54,5 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerType1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
