@@ -1,12 +1,17 @@
 package com.example.healthylife
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
+import android.widget.Toast
 import com.example.healthylife.databinding.ActivityAddExerciseInfoBinding
+import java.util.Calendar
+import kotlin.math.log
 
 class AddExerciseInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddExerciseInfoBinding
@@ -14,9 +19,10 @@ class AddExerciseInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddExerciseInfoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         initSpinner()
         manageBtn()
-        setContentView(binding.root)
     }
 
     fun manageBtn() {
@@ -25,7 +31,9 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                 finish()
             }
             saveBtn.setOnClickListener {
-
+                //데이터베이스에 운동정보 추가 구현
+                Toast.makeText(this@AddExerciseInfoActivity,"저장완료",Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
@@ -59,6 +67,9 @@ class AddExerciseInfoActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_dropdown_item, exerciseArea
         )
 
+        //현재 시간 반영
+        Current_Spinner()
+
         //시작시간 선택시 종료시간 자동 체크
         binding.apply {
             spinnerStartAmpm.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -82,12 +93,31 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    binding.spinnerFinishHour.setSelection(position+1)  //시작시간 선택시 1시간 후의 시간 자동 선택
+                        binding.spinnerFinishHour.setSelection(position)
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     //TODO("Not yet implemented")
                 }
             }
         }
+
+
+    }
+
+    private fun Current_Spinner(){
+        //현재 시간 설정
+        val currentTime = getCurrentTime()
+        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+        var currentMinute = currentTime.get(Calendar.MINUTE)
+
+        // 현재 시간에 맞게 스피너 설정
+        binding.spinnerStartAmpm.setSelection(if(currentHour < 12) 0 else 1)
+        binding.spinnerStartHour.setSelection(if (currentHour%12 ==0) 11  else (currentHour%12)-1)
+        binding.spinnerStartMinute.setSelection(if (currentMinute==0) 0 else currentMinute/5)
+        binding.spinnerFinishMinute.setSelection(if (currentMinute==0) 0 else currentMinute/5)
+    }
+
+    private fun getCurrentTime(): Calendar {
+        return Calendar.getInstance()
     }
 }
