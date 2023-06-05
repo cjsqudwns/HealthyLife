@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1025973464916",
+    "project_id": "healthylife-268aa",
+    "storage_bucket": "healthylife-268aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025973464916:android:afbdeb0229ea6afadda2c1",
+        "android_client_info": {
+          "package_name": "com.example.healthylife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi_mMb_IsIR37q08BZNsOJZT7w76W5e6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
