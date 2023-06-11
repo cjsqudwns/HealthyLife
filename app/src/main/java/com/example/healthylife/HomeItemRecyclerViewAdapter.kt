@@ -10,6 +10,11 @@ import com.example.healthylife.databinding.RowBinding
 
 class HomeItemRecyclerViewAdapter(val items:List<String>):RecyclerView.Adapter<HomeItemRecyclerViewAdapter.MyViewHolder>() {
 
+    interface ValueEventListener {
+        // fun onDataChange(dataSnapshot: DataSnapshot)
+        // fun onCancelled(databaseError: DatabaseError)
+    }
+
     inner class MyViewHolder(val binding: RowBinding) : RecyclerView.ViewHolder(binding.root){
         init{
 
