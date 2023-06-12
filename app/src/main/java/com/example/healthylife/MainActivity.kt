@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initLayout(){
         binding.viewPager.adapter = FragmentPagerAdapter(this)
+
         TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, pos ->
             tab.setIcon(tapImgArr[pos])
         }.attach()
