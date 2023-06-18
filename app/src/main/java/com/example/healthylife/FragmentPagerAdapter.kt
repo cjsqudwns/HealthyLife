@@ -12,7 +12,7 @@ class FragmentPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAd
 
     override fun createFragment(position: Int): Fragment {
         when(position){
-            0 -> return CalenderFragment()
+            0 -> return GraphFragment()
             1 -> return HomeFragment()
             2 -> return UserFragment()
             else -> return HomeFragment()
