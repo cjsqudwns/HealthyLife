@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.healthylife.databinding.FragmentCalenderBinding
+import java.util.Date
 
 class CalenderFragment : Fragment() {
     var binding:FragmentCalenderBinding ?= null
@@ -15,5 +16,8 @@ class CalenderFragment : Fragment() {
     ): View? {
         binding = FragmentCalenderBinding.inflate(layoutInflater, container, false)
         return binding!!.root
+    }
+    interface CalendarFragmentCallback {
+        fun onDateSelected(date: Date)
     }
 }

@@ -3,26 +3,78 @@ package com.example.healthylife
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.update
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CalendarView
 import android.widget.SpinnerAdapter
 import android.widget.Toast
+import androidx.core.view.get
 import com.example.healthylife.databinding.ActivityAddExerciseInfoBinding
+import com.github.mikephil.charting.utils.Utils.init
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneOffset
 import java.util.Calendar
 import kotlin.math.log
 
 class AddExerciseInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddExerciseInfoBinding
-
+    lateinit var auth: FirebaseAuth
+    var inputday:String? = null
+    var calenderMonth:Int = 0
+    var calenderDay:Int = 1
+    var calenderYear:Int = 2023
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddExerciseInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        init()
         initSpinner()
         manageBtn()
+    }
+    fun init(){
+        val selectedDateMillis = binding.calenderView.date
+        val selectedCalendar = Calendar.getInstance()
+        selectedCalendar.timeInMillis = selectedDateMillis
+        setInputDay(binding.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
+        auth = FirebaseAuth.getInstance()
+        binding.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
+            setInputDay(calendarView, year, month, day)
+        }
+    }
+    fun setInputDay(calendarView:CalendarView, year:Int, month:Int, day:Int){
+        calenderMonth = month+1
+        calenderDay = day
+        calenderYear = year
+        inputday = year.toString() + String.format("%02d", month+1)+String.format("%02d", day)
+        Log.d("TAG", inputday.toString())
+    }
+    fun getStartTime(): Timestamp {
+        var hours = Integer.parseInt(binding.spinnerStartHour.selectedItem.toString())
+        val minutes = Integer.parseInt(binding.spinnerStartMinute.selectedItem.toString())
+        if(binding.spinnerStartAmpm.selectedItem as String == "오후"){
+            hours +=12
+        }
+        val temp = LocalDateTime.of(calenderYear, calenderMonth, calenderDay, hours, minutes)
+        val timestamp = Timestamp(temp.toEpochSecond(ZoneOffset.ofHours(9)), 0)
+        return timestamp
+    }
+    //
+    fun getFinishTime(): Timestamp {
+        var hours = Integer.parseInt(binding.spinnerFinishHour.selectedItem.toString())
+        val minutes = Integer.parseInt(binding.spinnerFinishMinute.selectedItem.toString())
+        if(binding.spinnerFinishAmpm.selectedItem as String == "오후"){
+            hours +=12
+        }
+        val temp = LocalDateTime.of(calenderYear, calenderMonth+1, calenderDay, hours, minutes, 0)
+        val timestamp = Timestamp(temp.toEpochSecond(ZoneOffset.ofHours(9)), 0)
+        return timestamp
     }
 
     fun manageBtn() {
@@ -31,7 +83,48 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                 finish()
             }
             saveBtn.setOnClickListener {
-                //데이터베이스에 운동정보 추가 구현
+                val data = hashMapOf(
+                    "startTime" to getStartTime(),
+                    "finishTime" to getFinishTime(),
+                    "exerciseArea" to binding.spinnerExerciseArea.selectedItem.toString(),
+                    "memo" to binding.memo.text.toString()
+                )
+                val data2 = hashMapOf(
+                    "ExerciseTime" to getExerciseTime()
+                )
+                val collectionRef = FirebaseFirestore.getInstance().collection("UserInfo")
+                val documentRef = collectionRef.document(auth.currentUser!!.uid)
+                if(inputday != null){
+                    val todayCollectionRef = documentRef.collection("ExerciseInfo")
+                    todayCollectionRef
+                        .document(inputday!!).collection(binding.spinnerExerciseArea.selectedItem.toString()).get()
+                            .addOnSuccessListener { querySnapshot ->
+                                val documentCount = querySnapshot.size()
+                                todayCollectionRef
+                                    .document(inputday!!).collection(binding.spinnerExerciseArea.selectedItem.toString()).document((documentCount+1).toString())
+                                    .set(data)
+                                    .addOnFailureListener {
+                                        Log.d("TAG", it.message.toString())
+                            }
+                    }
+                    todayCollectionRef.document(inputday!!).get().addOnSuccessListener {
+                        if(it.exists()){
+                            val fieldValue = it.getLong("ExerciseTime")
+                            if(fieldValue != null){
+                                todayCollectionRef.document(inputday!!).update("ExerciseTime",getExerciseTime()+fieldValue)
+                            }
+                            else{
+                                todayCollectionRef.document(inputday!!).set(data2)
+                            }
+                        }
+                        else{
+                            todayCollectionRef.document(inputday!!).set(data2)
+                        }
+                    }
+                }
+                else{
+                    Log.d("TAG","inputday 비동기화 오류")
+                }
                 Toast.makeText(this@AddExerciseInfoActivity,"저장완료",Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -103,7 +196,20 @@ class AddExerciseInfoActivity : AppCompatActivity() {
 
 
     }
-
+    fun getExerciseTime(): Int {
+        var FinishHours = Integer.parseInt(binding.spinnerFinishHour.selectedItem.toString())
+        val FinishMinutes = Integer.parseInt(binding.spinnerFinishMinute.selectedItem.toString())
+        if(binding.spinnerFinishAmpm.selectedItem as String == "오후"){
+            FinishHours +=12
+        }
+        var StartHours = Integer.parseInt(binding.spinnerStartHour.selectedItem.toString())
+        val StartMinutes = Integer.parseInt(binding.spinnerStartMinute.selectedItem.toString())
+        if(binding.spinnerStartAmpm.selectedItem as String == "오후"){
+            StartHours +=12
+        }
+        var temp = (FinishHours-StartHours)*60+(FinishMinutes-StartMinutes)
+        return temp
+    }
     private fun Current_Spinner(){
         //현재 시간 설정
         val currentTime = getCurrentTime()
