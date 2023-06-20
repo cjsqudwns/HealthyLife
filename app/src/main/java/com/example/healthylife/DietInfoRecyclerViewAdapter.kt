@@ -3,12 +3,10 @@ package com.example.healthylife
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.healthylife.data.DietInfoData
 import com.example.healthylife.databinding.RowDietBinding
 
-class DietInfoRecyclerViewAdapter (val items:ArrayList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
+class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
         fun OnItemClick(data: DietInfoData, position: Int)
     }

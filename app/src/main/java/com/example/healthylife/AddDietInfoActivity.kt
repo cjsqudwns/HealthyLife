@@ -1,24 +1,53 @@
-package com.example.healthylife.activity
+package com.example.healthylife
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.example.healthylife.R
+import android.widget.CalendarView
 import com.example.healthylife.databinding.ActivityAddDietInfoBinding
+import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 
 class AddDietInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddDietInfoBinding
+    lateinit var auth: FirebaseAuth
+    var inputday:String? = null
+    var displayday:String? = null // 화면에 나오는 날짜
+    var calenderMonth:Int = 0
+    var calenderDay:Int = 1
+    var calenderYear:Int = 2023
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAddDietInfoBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        init()
         initSpinner()
         manageBtn()
     }
-
+    fun init(){
+        val selectedDateMillis = binding.calenderView.date
+        val selectedCalendar = Calendar.getInstance()
+        selectedCalendar.timeInMillis = selectedDateMillis
+        setInputDay(binding.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
+        auth = FirebaseAuth.getInstance()
+        displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
+        binding.selectedDay.text = displayday
+        binding.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
+            setInputDay(calendarView, year, month, day)
+            displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
+            binding.selectedDay.text = displayday.toString()
+        }
+    }
+    fun setInputDay(calendarView: CalendarView, year:Int, month:Int, day:Int){
+        calenderMonth = month+1
+        calenderDay = day
+        calenderYear = year
+        inputday = year.toString() + String.format("%02d", month+1)+String.format("%02d", day)
+        Log.d("TAG", inputday.toString())
+    }
     private fun manageBtn(){
         binding.apply {
             cancleBtn.setOnClickListener {

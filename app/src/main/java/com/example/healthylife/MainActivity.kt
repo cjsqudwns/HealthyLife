@@ -1,4 +1,4 @@
-package com.example.healthylife.activity
+package com.example.healthylife
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

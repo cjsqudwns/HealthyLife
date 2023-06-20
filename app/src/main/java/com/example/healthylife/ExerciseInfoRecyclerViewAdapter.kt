@@ -1,15 +1,11 @@
 package com.example.healthylife
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.healthylife.data.DietInfoData
-import com.example.healthylife.data.ExerciseInfoData
-import com.example.healthylife.databinding.RowDietBinding
 import com.example.healthylife.databinding.RowExerciseBinding
 
-class ExerciseInfoRecyclerViewAdapter (val items:ArrayList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.MyViewHolder>(){
+class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
         fun OnItemClick(data: ExerciseInfoData, position: Int)
     }
