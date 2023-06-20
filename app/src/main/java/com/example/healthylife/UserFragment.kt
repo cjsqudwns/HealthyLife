@@ -152,8 +152,8 @@ class UserFragment : Fragment() {
         lineDataSet.apply {
             lineWidth = 3F  // 그래프 선 굵기
             circleRadius = 8F  // 동그라미 크기
-            color = Color.BLACK
-            setCircleColor(Color.BLUE)
+            color = Color.WHITE
+            setCircleColor(Color.GREEN)
             setDrawCircles(true)    // 그래프의 해당 위치에 값 표시하는 동그라미
             setDrawValues(true)    // true하면 동그라미 주변에 값 표시, false면 표시 안함
             valueFormatter = DefaultValueFormatter(0)   // 소수점 자릿수 설정
@@ -168,9 +168,10 @@ class UserFragment : Fragment() {
         lineChart.apply {
             axisRight.isEnabled = false // y축 사용여부
             axisLeft.isEnabled = false
-            legend.isEnabled = true    // legend 사용여부
-            setDrawGridBackground(true)
+            legend.isEnabled = false    // legend 사용여부
+            setDrawGridBackground(false)
             description = descript  // 주석
+            setBackgroundColor(Color.BLACK)
         }
 
         // x축 설정
