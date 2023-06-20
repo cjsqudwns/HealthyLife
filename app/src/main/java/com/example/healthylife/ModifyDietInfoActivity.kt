@@ -3,6 +3,7 @@ package com.example.healthylife
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.healthylife.databinding.ActivityAddDietInfoBinding
 import com.example.healthylife.databinding.ActivityModifyDietInfoBinding
@@ -19,11 +20,11 @@ class ModifyDietInfoActivity : AppCompatActivity() {
         Datainit()
     }
     private fun Datainit(){
-        if (intent.hasExtra("date")) {
-            val date_key = intent.getStringExtra("date")
-        } else {
-            Toast.makeText(this, "전달된 key가 없습니다", Toast.LENGTH_SHORT).show()
-        }
+        val intent = intent
+        val data = intent.getSerializableExtra("modify_data") as ExerciseInfoData
+        //initSpinner(data.startTime, data.exercise_area)
+        Log.i("ds",data.startTime)
+        //binding.memo.setText(data.memo)
 
 
         auth = FirebaseAuth.getInstance()

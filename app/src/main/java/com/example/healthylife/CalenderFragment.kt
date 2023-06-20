@@ -129,6 +129,9 @@ class CalenderFragment : Fragment() {
             // 데이터 수정
             override fun modifyData(data: DietInfoData, position: Int) {
                 // 수정하러 modifyExerciseInfoActivity로 intent
+                val intent = Intent(requireContext(),ModifyDietInfoActivity::class.java)
+                intent.putExtra("modify_data",data)
+                startActivity(intent)
             }
         }
         binding!!.recyclerViewDietInfo.adapter = adapterDiet
