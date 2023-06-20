@@ -206,8 +206,6 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
     fun getExerciseTime(): Int {
         var FinishHours = Integer.parseInt(binding.spinnerFinishHour.selectedItem.toString())
