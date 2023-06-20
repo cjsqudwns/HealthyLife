@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    //여기도 데베 연결 작업 해주긴 해야하나..?
     fun initRecyclerView(){
         if (view is RecyclerView){
             with(view){

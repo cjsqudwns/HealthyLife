@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initLayout()
     }
-
+    
     private fun initLayout(){
         binding.viewPager.adapter = FragmentPagerAdapter(this)
 
