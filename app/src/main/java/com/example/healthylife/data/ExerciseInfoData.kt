@@ -1,3 +1,4 @@
 package com.example.healthylife.data
 
-class ExerciseInfoData (val day: String, val startTime: String, val exercise_area: String, val minute: Int, val memo: String)
+class ExerciseInfoData (var day: String, var startTime: String, var exercise_area: String,
+                        var minute: Int, var memo: String, var check: Boolean)

@@ -22,6 +22,7 @@ class AddExerciseInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddExerciseInfoBinding
     lateinit var auth: FirebaseAuth
     var inputday:String? = null
+    var displayday:String? = null
     var calenderMonth:Int = 0
     var calenderDay:Int = 1
     var calenderYear:Int = 2023
@@ -39,8 +40,12 @@ class AddExerciseInfoActivity : AppCompatActivity() {
         selectedCalendar.timeInMillis = selectedDateMillis
         setInputDay(binding.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
         auth = FirebaseAuth.getInstance()
+        displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
+        binding.selectedDay.text = displayday
         binding.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
             setInputDay(calendarView, year, month, day)
+            displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
+            binding.selectedDay.text = displayday.toString()
         }
     }
     fun setInputDay(calendarView:CalendarView, year:Int, month:Int, day:Int){
@@ -101,6 +106,20 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                                     .addOnFailureListener {
                                         Log.d("TAG", it.message.toString())
                             }
+                    }
+                    documentRef.get().addOnSuccessListener {
+                        if(it.exists()){
+                            val fieldValue = it.getLong("ExerciseTime")
+                            if(fieldValue != null){
+                                todayCollectionRef.document(inputday!!).update("ExerciseTime",getExerciseTime()+fieldValue)
+                            }
+                            else{
+                                todayCollectionRef.document(inputday!!).set(data2)
+                            }
+                        }
+                        else{
+                            todayCollectionRef.document(inputday!!).set(data2)
+                        }
                     }
                     todayCollectionRef.document(inputday!!).get().addOnSuccessListener {
                         if(it.exists()){

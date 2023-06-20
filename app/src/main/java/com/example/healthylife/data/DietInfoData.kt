@@ -1,4 +1,4 @@
 package com.example.healthylife.data
 
-class DietInfoData(val day:String, val dietPart:String, val startTime: String, val calorie:Int,
-                   val memoDiet:String, val carbs:Int, val protein:Int, val fat:Int)
+class DietInfoData(var day:String, var dietPart:String, var startTime: String, var calorie:Int,
+                   var memoDiet:String, var carbs:Int, var protein:Int, var fat:Int)
