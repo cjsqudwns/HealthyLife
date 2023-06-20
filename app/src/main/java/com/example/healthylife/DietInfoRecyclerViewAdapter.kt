@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.RowDietBinding
 
-class DietInfoRecyclerViewAdapter (val items:ArrayList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
+class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
         fun OnItemClick(data: DietInfoData, position: Int)
     }

@@ -7,7 +7,7 @@ import com.example.healthylife.databinding.RowExerciseBinding
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class ExerciseInfoRecyclerViewAdapter (val items:ArrayList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
+class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
     interface OnItemClickListener{
         fun OnStarClick(data: ExerciseInfoData, position: Int)
         fun modifyData(data: ExerciseInfoData, position: Int)

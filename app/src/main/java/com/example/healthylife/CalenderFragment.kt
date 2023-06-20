@@ -24,16 +24,13 @@ class CalenderFragment : Fragment() {
     var binding:FragmentCalenderBinding ?= null
     lateinit var adapterExercise: ExerciseInfoRecyclerViewAdapter
     lateinit var adapterDiet: DietInfoRecyclerViewAdapter
-    var exerciseInfoDataList: ArrayList<ExerciseInfoData> = arrayListOf()
-    var dietInfoDataList: ArrayList<DietInfoData> = arrayListOf()
+    var exerciseInfoDataList: MutableList<ExerciseInfoData> = mutableListOf()
+    var dietInfoDataList: MutableList<DietInfoData> = mutableListOf()
     lateinit var auth: FirebaseAuth
     var inputday:String? = null
     var calenderMonth:Int = 0
     var calenderDay:Int = 1
     var calenderYear:Int = 2023
-    var arrExercise = arrayListOf<ExerciseInfoData>(
-        ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ", true),
-        ExerciseInfoData("2023-06-21", "15:00", "어깨", 60, "ㄻㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ", true))
     var arrDiet = arrayListOf<DietInfoData>(
         DietInfoData("2023-06-20", "아점", "13:00", 1305,
             "ㅁㄴㅇㄹㅁㅇㄴㄹ", 10, 30, 50, true),
@@ -45,6 +42,8 @@ class CalenderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalenderBinding.inflate(layoutInflater, container, false)
+        exerciseInfoDataList.add(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ", true))
+        exerciseInfoDataList.add(ExerciseInfoData("2023-06-21", "15:00", "어깨", 60, "ㄻㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ", true))
         init()
         initRecyclerView()
         return binding!!.root
@@ -71,7 +70,7 @@ class CalenderFragment : Fragment() {
         // 운동 정보 recyclerView
         binding!!.recyclerViewExerciseInfo.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerViewExerciseInfo.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
-        adapterExercise = ExerciseInfoRecyclerViewAdapter(arrExercise)
+        adapterExercise = ExerciseInfoRecyclerViewAdapter(exerciseInfoDataList)
         //운동 정보 click시 작동
         adapterExercise.itemClickListener = object : ExerciseInfoRecyclerViewAdapter.OnItemClickListener {
             // 즐겨찾기 (별)

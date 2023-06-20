@@ -119,12 +119,15 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/EditeText_calorie"
                     android:layout_width="100dp"
                     android:layout_height="35dp"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:background="@color/white"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/black"
+                    android:gravity="right|center_vertical"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -149,12 +152,15 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/tansu"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:background="@color/white"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/black"
+                    android:gravity="right|center_vertical"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -173,12 +179,15 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/protein"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:background="@color/white"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/black"
+                    android:gravity="right|center_vertical"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -197,12 +206,15 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/fat"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:background="@color/white"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/black"
+                    android:gravity="right|center_vertical"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -225,8 +237,11 @@
                 android:inputType="textMultiLine"
                 android:lines="4"
                 android:maxLines="5"
+                android:textSize="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textColor="@color/black"
                 android:background="@color/white"/>
             <LinearLayout
                 android:layout_width="match_parent"
