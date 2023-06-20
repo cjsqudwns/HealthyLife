@@ -1,4 +1,4 @@
-package com.example.healthylife
+package com.example.healthylife.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.healthylife.activity.AddDietInfoActivity
+import com.example.healthylife.activity.AddExerciseInfoActivity
+import com.example.healthylife.R
 import com.example.healthylife.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {

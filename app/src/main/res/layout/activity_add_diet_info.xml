@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddDietInfoActivity"
+    tools:context=".activity.AddDietInfoActivity"
     android:padding="10dp"
     android:orientation="vertical"
     android:background="@color/black"
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:text="칼로리"
                     android:textSize="15dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginRight="15dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:text="단백질"
                     android:textSize="15dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:text="지방"
                     android:textSize="15dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"/>
@@ -238,13 +238,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:backgroundTint="#212020"
-                    android:text="취소"/>
+                    android:text="취소"
+                    android:textColor="@color/white"/>
                 <Button
                     android:id="@+id/saveBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#212020"
-                    android:text="저장"/>
+                    android:text="저장"
+                    android:textColor="@color/white"/>
 
             </LinearLayout>
         </LinearLayout>

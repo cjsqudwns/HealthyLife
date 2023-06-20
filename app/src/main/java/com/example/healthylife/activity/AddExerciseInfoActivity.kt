@@ -1,27 +1,22 @@
-package com.example.healthylife
+package com.example.healthylife.activity
 
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CalendarView
-import android.widget.SpinnerAdapter
 import android.widget.Toast
-import androidx.core.view.get
+import com.example.healthylife.R
 import com.example.healthylife.databinding.ActivityAddExerciseInfoBinding
-import com.github.mikephil.charting.utils.Utils.init
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneOffset
 import java.util.Calendar
-import kotlin.math.log
 
 class AddExerciseInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddExerciseInfoBinding
