@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/entireFrame"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,11 +21,11 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/exercise_area"
+                android:id="@+id/dietPart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="exercise_area"
+                android:text="diet type"
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:padding="10dp"/>
@@ -40,7 +41,7 @@
                 android:textStyle="bold"
                 android:padding="10dp"/>
             <TextView
-                android:id="@+id/start_time"
+                android:id="@+id/startTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -54,24 +55,24 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="운동 시간"
+                android:text="칼로리"
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:padding="10dp"/>
             <TextView
-                android:id="@+id/exercise_time"
+                android:id="@+id/calorie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="exercise_time"
+                android:text="calorie"
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:padding="10dp"/>
         </TableRow>
         <TableRow>
             <TextView
-                android:id="@+id/memo"
+                android:id="@+id/memoDiet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_span="4"
@@ -81,15 +82,76 @@
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
+    <TableLayout
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:orientation="vertical">
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="탄수화물"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="단백질"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="지방"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/carbs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="탄수화물"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:id="@+id/protein"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="단백질"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+            <TextView
+                android:id="@+id/fat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="지방"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+        </TableRow>
+    </TableLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:background="#212020"/>
-    <TextView
-        android:id="@+id/noData"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="No Data"
-        android:textSize="30dp"
-        android:gravity="center"/>
 </LinearLayout>

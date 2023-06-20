@@ -1,8 +1,9 @@
-package com.example.healthylife
+package com.example.healthylife.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import com.example.healthylife.FragmentPagerAdapter
+import com.example.healthylife.R
 import com.example.healthylife.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
