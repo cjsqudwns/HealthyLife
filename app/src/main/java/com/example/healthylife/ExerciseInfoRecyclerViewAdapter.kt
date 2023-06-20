@@ -10,14 +10,10 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
     interface OnItemClickListener{
         fun OnStarClick(data: ExerciseInfoData, position: Int)
-        fun modifyData(data: ExerciseInfoData, position: Int)
     }
     var itemClickListener: OnItemClickListener?=null
     inner class ViewHolder(val binding: RowExerciseBinding): RecyclerView.ViewHolder(binding.root){
         init{
-            binding.entireFrame.setOnClickListener{
-                itemClickListener!!.modifyData(items[adapterPosition], adapterPosition)
-            }
             binding.favorites.setOnClickListener{
                 itemClickListener!!.OnStarClick(items[adapterPosition], adapterPosition)
             }

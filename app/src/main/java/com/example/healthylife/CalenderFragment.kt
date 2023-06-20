@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.FragmentCalenderBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import java.lang.Math.floor
 import java.util.Calendar
 import java.util.Date
 
@@ -32,19 +35,12 @@ class CalenderFragment : Fragment() {
     var calenderMonth:Int = 0
     var calenderDay:Int = 1
     var calenderYear:Int = 2023
-    var arrDiet = arrayListOf<DietInfoData>(
-        DietInfoData("2023-06-20", "아점", "13:00", 1305,
-            "ㅁㄴㅇㄹㅁㅇㄴㄹ", 10, 30, 50, true),
-        DietInfoData("2023-06-21", "저녁", "17:00", 1200,
-            "ㅁㄴㅇㄹㅇㄴㄹㅈㄷㄹㅈ", 20, 70, 10, true))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalenderBinding.inflate(layoutInflater, container, false)
-        exerciseInfoDataList.add(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ", true))
-        exerciseInfoDataList.add(ExerciseInfoData("2023-06-21", "15:00", "어깨", 60, "ㄻㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ", true))
         init()
         initRecyclerView()
         return binding!!.root
@@ -56,9 +52,109 @@ class CalenderFragment : Fragment() {
         setInputDay(binding!!.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(
             Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
         auth = FirebaseAuth.getInstance()
+        getData()
+        getDietData()
         binding!!.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
             setInputDay(calendarView, year, month, day)
+            getData()
+            getDietData()
         }
+    }
+    fun getData() {
+        exerciseInfoDataList.clear()
+        val collectionRef =
+            FirebaseFirestore.getInstance().collection("UserInfo").document(auth.currentUser!!.uid)
+                .collection("ExerciseInfo")
+        collectionRef.get().addOnSuccessListener {
+            for (i in it.documents) {
+                if (i.id == inputday) {
+                    i.reference.get().addOnSuccessListener { dateSnapshot: DocumentSnapshot ->
+                        val temp = resources.getStringArray(R.array.exercise_area)
+                        for (area in temp) {
+                            dateSnapshot.reference.collection(area).get()
+                                .addOnSuccessListener { areaSnapshot: QuerySnapshot ->
+                                    for (j in areaSnapshot.documents) {
+                                        j.reference.get()
+                                            .addOnSuccessListener { finalSnapshot: DocumentSnapshot ->
+                                                val startTime =
+                                                    formatTimestamp(finalSnapshot.getDate("startTime")!!)
+                                                val exerciseArea =
+                                                    finalSnapshot.getString("exerciseArea")
+                                                val minute = calculateDurationInMinutes(
+                                                    finalSnapshot.getDate("startTime")!!,
+                                                    finalSnapshot.getDate("finishTime")!!
+                                                )
+                                                val memo = finalSnapshot.getString("memo")
+                                                if (exerciseArea != null && memo != null) {
+                                                    val exerciseInfoData = ExerciseInfoData(
+                                                        day = inputday!!,
+                                                        startTime = startTime,
+                                                        exercise_area = exerciseArea,
+                                                        minute = minute,
+                                                        memo = memo,
+                                                        check = false
+                                                    )
+                                                    exerciseInfoDataList.add(exerciseInfoData)
+                                                }
+                                                initRecyclerView()
+                                            }
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        initRecyclerView()
+    }
+    fun getDietData() {
+        dietInfoDataList.clear()
+        val collectionRef =
+            FirebaseFirestore.getInstance().collection("UserInfo").document(auth.currentUser!!.uid)
+                .collection("DietInfo")
+        collectionRef.get().addOnSuccessListener {
+            for (i in it.documents) {
+                if(i.id == inputday){
+                    i.reference.get().addOnSuccessListener { dateSnapshot: DocumentSnapshot ->
+                        val temp =resources.getStringArray(R.array.mealTime)
+                        for(area in temp){
+                            dateSnapshot.reference.collection(area).get()
+                                .addOnSuccessListener { areaSnapshot: QuerySnapshot ->
+                                    for (j in areaSnapshot.documents) {
+                                        j.reference.get()
+                                            .addOnSuccessListener { finalSnapshot: DocumentSnapshot ->
+                                                val startTime =
+                                                    formatTimestamp(finalSnapshot.getDate("startTime")!!)
+                                                val calrorie = finalSnapshot.getLong("calrorie")?.toInt()
+                                                val dietPart = finalSnapshot.getString("dietPart")
+                                                val memo = finalSnapshot.getString("memoFood")
+                                                val tansu= finalSnapshot.getLong("tansu")?.toInt()
+                                                val protein= finalSnapshot.getLong("protein")?.toInt()
+                                                val fat= finalSnapshot.getLong("fat")?.toInt()
+                                                if (dietPart != null && memo != null&&calrorie!=null&&tansu!=null&&protein!=null&&fat!=null) {
+                                                    val dietInputData = DietInfoData(
+                                                        day=inputday!!,
+                                                        dietPart=dietPart,
+                                                        startTime=startTime,
+                                                        calorie=calrorie,
+                                                        memoDiet=memo,
+                                                        carbs = tansu,
+                                                        protein = protein,
+                                                        fat = fat,
+                                                        check = false
+                                                    )
+                                                    dietInfoDataList.add(dietInputData)
+                                                }
+                                                initRecyclerView()
+                                            }
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        initRecyclerView()
     }
     fun setInputDay(calendarView: CalendarView, year:Int, month:Int, day:Int){
         calenderMonth = month+1
@@ -78,13 +174,6 @@ class CalenderFragment : Fragment() {
             override fun OnStarClick(data: ExerciseInfoData, position: Int) {
                 // 해당 데이터 check value 바꾸기(false -> true, true -> false) 데이터베이스
                 adapterExercise.favoritesSelected(position)
-            }
-            // 데이터 수정
-            override fun modifyData(data: ExerciseInfoData, position: Int) {
-                // 수정하러 modifyExerciseInfoActivity로 intent
-                val intent = Intent(requireContext(),ModifyExerciseInfoActivity::class.java)
-                intent.putExtra("modify_data",data)
-                startActivity(intent)
             }
         }
         binding!!.recyclerViewExerciseInfo.adapter = adapterExercise
@@ -118,17 +207,13 @@ class CalenderFragment : Fragment() {
         // 식단 정보 recyclerView
         binding!!.recyclerViewDietInfo.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerViewDietInfo.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
-        adapterDiet = DietInfoRecyclerViewAdapter(arrDiet)
+        adapterDiet = DietInfoRecyclerViewAdapter(dietInfoDataList)
         //운동 정보 click시 작동
         adapterDiet.itemClickListener = object : DietInfoRecyclerViewAdapter.OnItemClickListener {
             // 즐겨찾기 (별)
             override fun OnStarClick(data: DietInfoData, position: Int) {
                 // 해당 데이터 check value 바꾸기(false -> true, true -> false) 데이터베이스
                 adapterDiet.favoritesSelected(position)
-            }
-            // 데이터 수정
-            override fun modifyData(data: DietInfoData, position: Int) {
-                // 수정하러 modifyExerciseInfoActivity로 intent
             }
         }
         binding!!.recyclerViewDietInfo.adapter = adapterDiet
@@ -159,5 +244,22 @@ class CalenderFragment : Fragment() {
         }
         val itemTouchHelperDiet = ItemTouchHelper(simpleCallbackDiet)
         itemTouchHelperDiet.attachToRecyclerView(binding!!.recyclerViewDietInfo)
+    }
+    fun calculateDurationInMinutes(startTimeStamp: Date, endTimeStamp: Date): Int {
+        val durationInMillis = endTimeStamp.time - startTimeStamp.time
+        val minutes = floor(durationInMillis.toDouble() / (1000 * 60)).toInt()
+        return minutes
+    }
+    fun formatTimestamp(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val amPm = if (hourOfDay < 12) "오전" else "오후"
+        val formattedHour = if (hourOfDay % 12 == 0) 12 else hourOfDay % 12
+
+        return "$amPm ${formattedHour}시 ${minute}분"
     }
 }

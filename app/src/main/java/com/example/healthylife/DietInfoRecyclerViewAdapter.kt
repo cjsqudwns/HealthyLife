@@ -9,15 +9,11 @@ import com.example.healthylife.databinding.RowDietBinding
 class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
         fun OnStarClick(data: DietInfoData, position: Int)
-        fun modifyData(data: DietInfoData, position: Int)
     }
 
     var itemClickListener:OnItemClickListener?=null
     inner class MyViewHolder(val binding: RowDietBinding): RecyclerView.ViewHolder(binding.root){
         init{
-            binding.entireFrame.setOnClickListener{
-                itemClickListener!!.modifyData(items[adapterPosition], adapterPosition)
-            }
             binding.favorites.setOnClickListener{
                 itemClickListener!!.OnStarClick(items[adapterPosition], adapterPosition)
             }
