@@ -15,13 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.healthylife.activity.LoginActivity
-import com.example.healthylife.data.ExerciseTimeData
+import com.example.healthylife.LoginActivity
+import com.example.healthylife.ExerciseTimeData
 import com.example.healthylife.databinding.FragmentUserBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
@@ -38,7 +36,6 @@ import java.io.File
 import java.math.BigInteger.TWO
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import com.example.healthylife.data.*
 
 class UserFragment : Fragment() {
     lateinit var lineChart: LineChart
@@ -94,7 +91,7 @@ class UserFragment : Fragment() {
             val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_nickname, null)
             val mBuilder = AlertDialog.Builder(requireContext())
                 .setView(mDialogView)
-            mBuilder.show()
+            val dialog = mBuilder.show()
             mDialogView.findViewById<Button>(R.id.OKBtn).setOnClickListener {
                 val nickname = mDialogView.findViewById<EditText>(R.id.NicknameEditText).text.toString()
                 FirebaseFirestore.getInstance().collection("UserInfo").document(auth.currentUser!!.uid)
@@ -102,6 +99,7 @@ class UserFragment : Fragment() {
                     .addOnSuccessListener {
                         binding?.userID?.text = nickname
                     }
+                dialog.dismiss()
             }
         }
         binding?.setImage?.setOnClickListener {

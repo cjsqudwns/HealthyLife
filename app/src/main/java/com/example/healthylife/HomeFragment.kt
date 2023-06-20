@@ -19,8 +19,8 @@ class HomeFragment : Fragment() {
     var binding: FragmentHomeBinding ?=null
     lateinit var adapterExercise: ExerciseInfoRecyclerViewAdapter
     lateinit var adapterDiet: DietInfoRecyclerViewAdapter
-    var exerciseInfoDataList: MutableList<ExerciseInfoData> = mutableListOf()
-    var dietInfoDataList: MutableList<DietInfoData> = mutableListOf()
+    var exerciseInfoDataList: ArrayList<ExerciseInfoData> = arrayListOf()
+    var dietInfoDataList: ArrayList<DietInfoData> = arrayListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

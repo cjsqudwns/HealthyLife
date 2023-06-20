@@ -4,41 +4,48 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.RowExerciseBinding
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.MyViewHolder>(){
+class ExerciseInfoRecyclerViewAdapter (val items:ArrayList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
     interface OnItemClickListener{
         fun OnItemClick(data: ExerciseInfoData, position: Int)
     }
-    var itemClickListener: ExerciseInfoRecyclerViewAdapter.OnItemClickListener?=null
-    inner class MyViewHolder(val binding: RowExerciseBinding): RecyclerView.ViewHolder(binding.root){
+    var itemClickListener: OnItemClickListener?=null
+    inner class ViewHolder(val binding: RowExerciseBinding): RecyclerView.ViewHolder(binding.root){
         init{
+            binding.entireFrame.setOnClickListener{
+                itemClickListener!!.OnItemClick(items[adapterPosition], adapterPosition)
+            }
             binding.favorites.setOnClickListener{
-                itemClickListener?.OnItemClick(items[adapterPosition], adapterPosition)
+                itemClickListener!!.OnItemClick(items[adapterPosition], adapterPosition)
+                //favoritesSelected(adapterPosition)
             }
         }
     }
-    fun favoritesSelected(pos:Int){
-        if(items[pos].check) items[pos].check = false
-        else items[pos].check = true
-        notifyItemChanged(pos)
-    }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType:Int):MyViewHolder{
+//    fun favoritesSelected(pos:Int){
+//        if(items[pos].check) items[pos].check = false
+//        else items[pos].check = true
+//        notifyItemChanged(pos)
+//    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewHolder {
         val view = RowExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder:MyViewHolder, position:Int) {
-        holder.binding.time.text = items[position].day
-        holder.binding.exerciseTime.text = items[position].minute.toString() + "분"
-        holder.binding.startTime.text = items[position].startTime
-        holder.binding.exerciseArea.text = items[position].exercise_area
-        holder.binding.memoExercise.text = items[position].memo
-        if(items[position].check)
-            holder.binding.favorites.setImageResource(R.drawable.baseline_star)
-        else
-            holder.binding.favorites.setImageResource(R.drawable.baseline_star_border)
+    override fun onBindViewHolder(holder:ViewHolder, position:Int) {
+        holder.binding!!.apply{
+            time.text = items[position].day
+            exerciseTime.text = items[position].minute.toString() + "분"
+            startTime.text = items[position].startTime
+            exerciseArea.text = items[position].exercise_area
+            memoExercise.text = items[position].memo
+            if(items[position].check)
+                favorites.setImageResource(R.drawable.baseline_star)
+            else
+                favorites.setImageResource(R.drawable.baseline_star_border)
+        }
     }
-
     override fun getItemCount(): Int {
         return items.size
     }
