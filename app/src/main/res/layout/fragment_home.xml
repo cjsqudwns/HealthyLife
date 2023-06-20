@@ -11,6 +11,8 @@
     android:paddingTop="40dp">
 
     <Button
+        android:fontFamily="@font/myfont2"
+        android:textSize="20dp"
         android:id="@+id/addExerciseBtn"
         android:layout_width="130dp"
         android:layout_height="50dp"
@@ -20,6 +22,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:fontFamily="@font/myfont2"
+        android:textSize="20dp"
         android:id="@+id/addDietBtn"
         android:layout_width="130dp"
         android:layout_height="50dp"

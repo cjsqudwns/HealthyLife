@@ -218,6 +218,8 @@
                 android:gravity="center"
                 android:padding="10dp">
                 <Button
+                    android:fontFamily="@font/myfont2"
+                    android:textSize="20dp"
                     android:id="@+id/cancleBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -225,6 +227,8 @@
                     android:backgroundTint="#212020"
                     android:text="취소"/>
                 <Button
+                    android:fontFamily="@font/myfont2"
+                    android:textSize="20dp"
                     android:id="@+id/modifyBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

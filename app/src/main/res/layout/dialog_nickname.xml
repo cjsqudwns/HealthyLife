@@ -20,6 +20,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:fontFamily="@font/myfont2"
+        android:textSize="20dp"
         android:id="@+id/OKBtn"
         android:layout_width="230dp"
         android:layout_height="wrap_content"

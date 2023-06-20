@@ -131,6 +131,8 @@
                 android:textColorHint="#D9D9D9"
                 android:layout_marginBottom="20dp"/>
             <Button
+                android:fontFamily="@font/myfont2"
+                android:textSize="20dp"
                 android:id="@+id/registerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

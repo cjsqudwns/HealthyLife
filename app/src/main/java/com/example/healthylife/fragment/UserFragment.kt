@@ -20,6 +20,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.example.healthylife.activity.LoginActivity
+import com.example.healthylife.data.ExerciseTimeData
 import com.example.healthylife.databinding.FragmentUserBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
@@ -36,6 +38,7 @@ import java.io.File
 import java.math.BigInteger.TWO
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import com.example.healthylife.data.*
 
 class UserFragment : Fragment() {
     lateinit var lineChart: LineChart

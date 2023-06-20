@@ -239,9 +239,11 @@
                     android:layout_marginEnd="20dp"
                     android:backgroundTint="#212020"
                     android:text="취소"
+                    android:fontFamily="@font/myfont2"
                     android:textColor="@color/white"/>
                 <Button
                     android:id="@+id/saveBtn"
+                    android:fontFamily="@font/myfont2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#212020"
