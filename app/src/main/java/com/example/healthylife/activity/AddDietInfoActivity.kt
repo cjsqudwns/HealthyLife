@@ -1,10 +1,11 @@
-package com.example.healthylife
+package com.example.healthylife.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.example.healthylife.R
 import com.example.healthylife.databinding.ActivityAddDietInfoBinding
 import java.util.Calendar
 
