@@ -1,4 +1,4 @@
-package com.example.healthylife.fragment
+package com.example.healthylife
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.healthylife.data.ExerciseTimeData
 import com.example.healthylife.databinding.FragmentGraphBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description

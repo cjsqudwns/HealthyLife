@@ -1,4 +1,4 @@
-package com.example.healthylife.activity
+package com.example.healthylife
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

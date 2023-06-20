@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AddDietInfoActivity"
+    tools:context=".AddDietInfoActivity"
     android:padding="10dp"
     android:orientation="vertical"
     android:background="@color/black"
@@ -32,6 +32,7 @@
                 android:background="@color/white"
                 android:layout_margin="10dp"/>
             <TextView
+                android:id="@+id/selectedDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Selected day"

@@ -1,4 +1,4 @@
-package com.example.healthylife.activity
+package com.example.healthylife
 
 
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CalendarView
 import android.widget.Toast
-import com.example.healthylife.R
 import com.example.healthylife.databinding.ActivityAddExerciseInfoBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
