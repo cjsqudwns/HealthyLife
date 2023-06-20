@@ -82,6 +82,8 @@ class UserFragment : Fragment() {
         binding?.Logout?.setOnClickListener {
             auth.signOut()
             val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
         binding?.setNickname?.setOnClickListener{

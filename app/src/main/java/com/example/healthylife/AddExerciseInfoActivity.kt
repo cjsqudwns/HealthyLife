@@ -71,7 +71,7 @@ class AddExerciseInfoActivity : AppCompatActivity() {
         if(binding.spinnerFinishAmpm.selectedItem as String == "오후"){
             hours +=12
         }
-        val temp = LocalDateTime.of(calenderYear, calenderMonth+1, calenderDay, hours, minutes, 0)
+        val temp = LocalDateTime.of(calenderYear, calenderMonth, calenderDay, hours, minutes, 0)
         val timestamp = Timestamp(temp.toEpochSecond(ZoneOffset.ofHours(9)), 0)
         return timestamp
     }
@@ -86,7 +86,8 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                     "startTime" to getStartTime(),
                     "finishTime" to getFinishTime(),
                     "exerciseArea" to binding.spinnerExerciseArea.selectedItem.toString(),
-                    "memo" to binding.memo.text.toString()
+                    "memo" to binding.memo.text.toString(),
+                    "check" to false
                 )
                 val data2 = hashMapOf(
                     "ExerciseTime" to getExerciseTime()
@@ -99,6 +100,7 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                         .document(inputday!!).collection(binding.spinnerExerciseArea.selectedItem.toString()).get()
                             .addOnSuccessListener { querySnapshot ->
                                 val documentCount = querySnapshot.size()
+                                data["did"] = (documentCount+1).toString()
                                 todayCollectionRef
                                     .document(inputday!!).collection(binding.spinnerExerciseArea.selectedItem.toString()).document((documentCount+1).toString())
                                     .set(data)

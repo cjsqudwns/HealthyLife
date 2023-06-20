@@ -72,7 +72,8 @@ class AddDietInfoActivity : AppCompatActivity() {
                     "tansu" to binding.tansu.text.toString().toInt(),
                     "protein" to binding.protein.text.toString().toInt(),
                     "fat" to binding.fat.text.toString().toInt(),
-                    "memoFood" to binding.memoFood.text.toString()
+                    "memoFood" to binding.memoFood.text.toString(),
+                    "check" to false
                 )
                 val data2 = hashMapOf(
                     "calrorie" to binding.EditeTextCalorie.text.toString().toInt()
@@ -85,6 +86,8 @@ class AddDietInfoActivity : AppCompatActivity() {
                         .document(inputday!!).collection(binding.spinnerDietPart.selectedItem.toString()).get()
                         .addOnSuccessListener { querySnapshot ->
                             val documentCount = querySnapshot.size()
+                            data["did"] = (documentCount+1).toString()
+
                             todayCollectionRef
                                 .document(inputday!!).collection(binding.spinnerDietPart.selectedItem.toString()).document((documentCount+1).toString())
                                 .set(data)

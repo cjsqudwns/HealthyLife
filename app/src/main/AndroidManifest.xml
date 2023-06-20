@@ -16,9 +16,6 @@
             android:name=".AddDietInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ModifyExerciseInfoActivity"
-            android:exported="false" />
-        <activity
             android:name=".AddExerciseInfoActivity"
             android:exported="true">
             <meta-data

@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.RowDietBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
@@ -27,9 +29,8 @@ class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): Recycle
         val view = RowDietBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(view)
     }
-    fun favoritesSelected(pos:Int){
-        if(items[pos].check) items[pos].check = false
-        else items[pos].check = true
+    fun favoritesSelected(pos:Int,checked:Boolean){
+        items[pos].check = checked
         notifyItemChanged(pos)
     }
 
@@ -51,5 +52,25 @@ class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): Recycle
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun deleteRecyclerView(adapterPosition: Int) {
+        var auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val remData = items[adapterPosition]
+        val collectionRef = FirebaseFirestore.getInstance().collection("UserInfo")
+            .document(auth.currentUser!!.uid)
+            .collection("ExerciseInfo")
+            .document(remData.day)
+            .collection(remData.dietPart)
+            .document(remData.did)
+        collectionRef.delete()
+            .addOnSuccessListener {
+                // 삭제 성공
+                // 추가 작업 수행
+            }
+            .addOnFailureListener { e ->
+                // 삭제 실패
+                // 예외 처리를 수행하거나 오류 메시지를 표시할 수 있습니다.
+            }
     }
 }
