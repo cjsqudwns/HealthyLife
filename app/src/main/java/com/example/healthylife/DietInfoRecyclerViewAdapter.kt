@@ -36,11 +36,11 @@ class DietInfoRecyclerViewAdapter (val items:ArrayList<DietInfoData>): RecyclerV
         holder.binding.time.text = items[position].day
         holder.binding.dietPart.text = items[position].dietPart
         holder.binding.startTime.text = items[position].startTime
-        holder.binding.calorie.text = items[position].calorie.toString()
+        holder.binding.calorie.text = items[position].calorie.toString() + "cal"
         holder.binding.memoDiet.text = items[position].memoDiet
-        holder.binding.carbs.text = items[position].carbs.toString()
-        holder.binding.protein.text = items[position].protein.toString()
-        holder.binding.fat.text = items[position].fat.toString()
+        holder.binding.carbs.text = items[position].carbs.toString() + "g"
+        holder.binding.protein.text = items[position].protein.toString() + "g"
+        holder.binding.fat.text = items[position].fat.toString() + "g"
         holder.binding.detail.visibility = View.GONE
     }
 
