@@ -9,25 +9,25 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 
 class ExerciseInfoRecyclerViewAdapter (val items:ArrayList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
     interface OnItemClickListener{
-        fun OnItemClick(data: ExerciseInfoData, position: Int)
+        fun OnStarClick(data: ExerciseInfoData, position: Int)
+        fun modifyData(data: ExerciseInfoData, position: Int)
     }
     var itemClickListener: OnItemClickListener?=null
     inner class ViewHolder(val binding: RowExerciseBinding): RecyclerView.ViewHolder(binding.root){
         init{
             binding.entireFrame.setOnClickListener{
-                itemClickListener!!.OnItemClick(items[adapterPosition], adapterPosition)
+                itemClickListener!!.modifyData(items[adapterPosition], adapterPosition)
             }
             binding.favorites.setOnClickListener{
-                itemClickListener!!.OnItemClick(items[adapterPosition], adapterPosition)
-                //favoritesSelected(adapterPosition)
+                itemClickListener!!.OnStarClick(items[adapterPosition], adapterPosition)
             }
         }
     }
-//    fun favoritesSelected(pos:Int){
-//        if(items[pos].check) items[pos].check = false
-//        else items[pos].check = true
-//        notifyItemChanged(pos)
-//    }
+    fun favoritesSelected(pos:Int){
+        if(items[pos].check) items[pos].check = false
+        else items[pos].check = true
+        notifyItemChanged(pos)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewHolder {
         val view = RowExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)

@@ -32,8 +32,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import java.io.File
-import java.math.BigInteger.TWO
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -160,7 +158,7 @@ class UserFragment : Fragment() {
             setDrawValues(true)    // true하면 동그라미 주변에 값 표시, false면 표시 안함
             valueFormatter = DefaultValueFormatter(0)   // 소수점 자릿수 설정
             valueTextSize = 12F
-            valueTextColor = Color.MAGENTA
+            valueTextColor = Color.WHITE
         }
 
         val descript = Description()

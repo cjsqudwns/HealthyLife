@@ -52,16 +52,16 @@ class HomeFragment : Fragment() {
                             this@HomeFragment.requireContext(),
                             android.R.layout.simple_spinner_dropdown_item, exerciseArea)
                         var exerciseArea = binding!!.spinnerType2.selectedItem.toString()
-                        // + exerciseArea(전신 ..)에 해당하는 값들을 데이터 베이스에서 읽어 리스트에 담는 get함수
-                        initExerciseRecyclerView(exerciseArea)
+                        // + exerciseArea(전신 ..)에 해당하는 값들을 데이터베이스에서 읽어 리스트에 담는 get함수
+                        initExerciseRecyclerView()
                     }
                     1 -> {
                         binding!!.spinnerType2.adapter = ArrayAdapter(
                             this@HomeFragment.requireContext(),
                             android.R.layout.simple_spinner_dropdown_item, mealTime)
                         var dietPart = binding!!.spinnerType2.selectedItem.toString()
-                        // + dietPart(아점, 점심 ..)에 해당하는 값들을 데이터 베이스에서 읽어 리스트에 담는 get함수
-                        initDietRecyclerView(dietPart)
+                        // + dietPart(아점, 점심 ..)에 해당하는 값들을 데이터베이스에서 읽어 리스트에 담는 get함수
+                        initDietRecyclerView()
                     }
 
                 }
@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
         }
     }
     //여기도 데베 연결 작업 해주긴 해야하나..?
-    fun initExerciseRecyclerView(exerciseArea:String){
+    fun initExerciseRecyclerView(){
         //운동 정보 recyclerView
         binding!!.recyclerView.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerView.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
         binding!!.recyclerView.adapter = adapterExercise
 
     }
-    fun initDietRecyclerView(diet:String){
+    fun initDietRecyclerView(){
         //식단 정보 recyclerView
         binding!!.recyclerView.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerView.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
