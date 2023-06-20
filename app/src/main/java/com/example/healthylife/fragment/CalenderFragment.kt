@@ -1,70 +1,95 @@
 package com.example.healthylife.fragment
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CalendarView
-import android.widget.EditText
 import androidx.core.view.get
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.DietInfoRecyclerViewAdapter
 import com.example.healthylife.data.ExerciseInfoData
 import com.example.healthylife.ExerciseInfoRecyclerViewAdapter
 import com.example.healthylife.R
 import com.example.healthylife.data.DietInfoData
 import com.example.healthylife.databinding.FragmentCalenderBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
+import java.util.Date
+import kotlin.math.floor
 
 class CalenderFragment : Fragment() {
     var binding:FragmentCalenderBinding ?= null
     lateinit var adapterExercise: ExerciseInfoRecyclerViewAdapter
     lateinit var adapterDiet: DietInfoRecyclerViewAdapter
-    var arr = arrayListOf<ExerciseInfoData>(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ", false))
-    var inputday:String? = null
-    var calenderMonth:Int = 0
-    var calenderDay:Int = 1
-    var calenderYear:Int = 2023
+    lateinit var auth:FirebaseAuth
+    val exerciseInfoDataList: MutableList<ExerciseInfoData> = mutableListOf()
+    var arr = arrayListOf<ExerciseInfoData>(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ",false))
+    private val calendar = Calendar.getInstance()
+    private var currentMonth = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalenderBinding.inflate(layoutInflater, container, false)
+        auth = FirebaseAuth.getInstance()
         initRecyclerView()
-        val selectedDateMillis = binding!!.calenderView.date
-        val selectedCalendar = Calendar.getInstance()
-        selectedCalendar.timeInMillis = selectedDateMillis
-        setInputDay(binding!!.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
-        binding!!.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
-            setInputDay(calendarView, year, month, day)
-        }
+        selectDay()
         return binding!!.root
     }
-    fun setInputDay(calendarView:CalendarView, year:Int, month:Int, day:Int){
-        calenderMonth = month+1
-        calenderDay = day
-        calenderYear = year
-        inputday = year.toString() + String.format("%02d", month+1)+String.format("%02d", day)
-        Log.d("TAG", inputday.toString())
+    fun selectDay(){
+        val calenderV = binding!!.calenderView
+        calenderV.setOnDateChangeListener { calendarView, year, month, day
+            ->  getData(year,month,day)}
+
+    }
+    fun getData(year:Int,month:Int,day:Int){
+        exerciseInfoDataList.clear()
+        val userdata = FirebaseFirestore.getInstance().collection("UserInfo").document(auth.currentUser!!.uid)
+        val inputday = year.toString() + String.format("%02d", month+1)+String.format("%02d", day)
+        userdata.collection("ExerciseInfo").document(inputday).get().addOnSuccessListener { DocumentsSnapshot ->
+            //class ExerciseInfoData (val day: String, val startTime: String, val exercise_area: String, val minute: Int, val memo: String)
+            val exerciseAreas = resources.getStringArray(R.array.exercise_area)
+            for (area in exerciseAreas) {
+                if (DocumentsSnapshot.exists()) {
+                    DocumentsSnapshot.reference.collection(area).get().addOnSuccessListener {
+                        if (it.isEmpty) {
+                            // 컬렉션이 비어있음
+                        } else {
+                            // 컬렉션에 문서가 존재함
+                            for (document in it.documents) {
+                                val startTime = document.getString("startTime")
+                                val exerciseArea = document.getString("exercise_area")
+                                val minute = calculateDurationInMinutes(document.getDate("startTime")!!,document.getDate("finishTime")!!)
+                                val memo = document.getString("memo")
+
+                                if (startTime != null && exerciseArea != null && memo != null) {
+                                    val exerciseInfoData = ExerciseInfoData(
+                                        day = inputday,
+                                        startTime = startTime,
+                                        exercise_area = exerciseArea,
+                                        minute = minute,
+                                        memo = memo,
+                                        check = false
+                                    )
+                                    exerciseInfoDataList.add(exerciseInfoData)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     fun initRecyclerView(){
         //운동 정보 recyclerView
         binding!!.recyclerViewExerciseInfo.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerViewExerciseInfo.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
-        adapterExercise = ExerciseInfoRecyclerViewAdapter(arr)
-        adapterExercise.itemClickListener = object : ExerciseInfoRecyclerViewAdapter.OnItemClickListener {
-            override fun OnItemClick(data: ExerciseInfoData, position: Int) {
-                adapterExercise.favoritesSelected(position)
-            }
-        }
+        adapterExercise = ExerciseInfoRecyclerViewAdapter(arrayListOf())
         binding!!.recyclerViewExerciseInfo.adapter = adapterExercise
         //식단 정보 recyclerView
         binding!!.recyclerViewDietInfo.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -76,37 +101,14 @@ class CalenderFragment : Fragment() {
 //            }
 //        }
         binding!!.recyclerViewDietInfo.adapter = adapterDiet
-        //swipe시 해당 데이터 지우기
-        val simpleCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                //adapterExercise.moveItem(viewHolder.adapterPosition, target.adapterPosition)
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //adapterExercise.removeItem(viewHolder.adapterPosition)
-                val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_delete, null)
-                val mBuilder = AlertDialog.Builder(requireContext())
-                    .setView(mDialogView)
-                val dialog = mBuilder.show()
-                mDialogView.findViewById<Button>(R.id.OKBtn).setOnClickListener {
-                    // 해당 데이터 삭제 진행
-                    dialog.dismiss()
-                }
-                mDialogView.findViewById<Button>(R.id.cancleBtn).setOnClickListener {
-                    dialog.dismiss()
-                    adapterExercise.notifyDataSetChanged()
-                }
-            }
-
-        }
-        val itemTouchHelper = ItemTouchHelper(simpleCallback)
-        itemTouchHelper.attachToRecyclerView(binding!!.recyclerViewExerciseInfo)
 
 
+
+    }
+
+    fun calculateDurationInMinutes(startTimeStamp: Date, endTimeStamp: Date): Int {
+        val durationInMillis = endTimeStamp.time - startTimeStamp.time
+        val minutes = floor(durationInMillis.toDouble() / (1000 * 60)).toInt()
+        return minutes
     }
 }
