@@ -132,7 +132,7 @@ class CalenderFragment : Fragment() {
             }
         }
         binding!!.recyclerViewDietInfo.adapter = adapterDiet
-        // swipe
+        // swipe 시 해당 데이터 delete
         val simpleCallbackDiet = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
             override fun onMove(
                 recyclerView: RecyclerView,
