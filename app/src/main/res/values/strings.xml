@@ -54,4 +54,11 @@
         <item>야식</item>
         <item>간식</item>
     </string-array>
+    <string-array name="userClass">
+        <item>일반인</item>
+        <item>헬린이</item>
+        <item>헬스 입문인</item>
+        <item>헬스인</item>
+        <item>헬창</item>
+    </string-array>
 </resources>

@@ -30,6 +30,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
@@ -43,6 +44,9 @@ class UserFragment : Fragment() {
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private lateinit var auth: FirebaseAuth
     var databaseList : MutableList<ExerciseTimeData> = mutableListOf()
+
+    var userClass = 0   // 임시로 만든 유저 계급 변수, 원래는 firebase에 구현되어 있어야 함
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +73,7 @@ class UserFragment : Fragment() {
         documentRef.get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
+                    // setUserClass(documentRef)
                     nicknameGet = documentSnapshot.getString("Nickname")
                     Log.d("TAG", "Variable value: $nicknameGet")
                     binding?.userID?.text = nicknameGet
@@ -124,6 +129,19 @@ class UserFragment : Fragment() {
             Glide.with(this)
                 .load(imageUrl)
                 .into(binding!!.imageView)
+        }
+    }
+
+    private fun setUserClass(documentRef: DocumentReference) {
+        val todayCollectionRef = documentRef.collection("ExerciseInfo")
+        val exerciseCnt = todayCollectionRef.count().toString().toInt()
+        val userClass = ArrayList<String>(R.array.userClass)
+        when (exerciseCnt) {
+            0 -> binding!!.userClass.text = userClass[0]
+            1 -> binding!!.userClass.text = userClass[1]
+            2 -> binding!!.userClass.text = userClass[2]
+            3 -> binding!!.userClass.text = userClass[3]
+            else -> binding!!.userClass.text = userClass[4]
         }
     }
 

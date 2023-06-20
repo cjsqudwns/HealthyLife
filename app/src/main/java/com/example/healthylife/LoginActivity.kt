@@ -34,6 +34,9 @@ class LoginActivity : AppCompatActivity() {
                         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task->
                             if(task.isSuccessful) {
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                // 로그인한 후 메인화면에서 뒤로 가기 눌렀을 때 다시 로그인 화면으로 가지 않도록 하는 코드
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)
                             } else{
                                 // Show the error message
