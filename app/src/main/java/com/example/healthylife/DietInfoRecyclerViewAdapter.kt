@@ -8,17 +8,18 @@ import com.example.healthylife.databinding.RowDietBinding
 
 class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): RecyclerView.Adapter<DietInfoRecyclerViewAdapter.MyViewHolder>(){
     interface OnItemClickListener{
-        fun OnItemClick(data: DietInfoData, position: Int)
+        fun OnStarClick(data: DietInfoData, position: Int)
+        fun modifyData(data: DietInfoData, position: Int)
     }
 
     var itemClickListener:OnItemClickListener?=null
     inner class MyViewHolder(val binding: RowDietBinding): RecyclerView.ViewHolder(binding.root){
         init{
             binding.entireFrame.setOnClickListener{
-                itemClickListener?.OnItemClick(items[adapterPosition], adapterPosition)
+                itemClickListener!!.modifyData(items[adapterPosition], adapterPosition)
             }
             binding.favorites.setOnClickListener{
-                itemClickListener?.OnItemClick(items[adapterPosition], adapterPosition)
+                itemClickListener!!.OnStarClick(items[adapterPosition], adapterPosition)
             }
         }
     }
@@ -30,6 +31,11 @@ class DietInfoRecyclerViewAdapter (val items:MutableList<DietInfoData>): Recycle
         if(items[pos].check) items[pos].check = false
         else items[pos].check = true
         notifyItemChanged(pos)
+    }
+
+    fun deleteData(pos:Int){
+        items.removeAt(pos)
+        notifyItemRemoved(pos)
     }
 
     override fun onBindViewHolder(holder:MyViewHolder, position:Int) {

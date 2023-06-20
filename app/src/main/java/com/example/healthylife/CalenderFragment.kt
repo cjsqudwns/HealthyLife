@@ -85,7 +85,7 @@ class CalenderFragment : Fragment() {
         }
         binding!!.recyclerViewExerciseInfo.adapter = adapterExercise
         // swipe 시 해당 데이터 delete
-        val simpleCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
+        val simpleCallbackExercise = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -100,6 +100,7 @@ class CalenderFragment : Fragment() {
                 val dialog = mBuilder.show()
                 mDialogView.findViewById<Button>(R.id.OKBtn).setOnClickListener {
                     // 해당 데이터 delete 데이터베이스
+                    adapterExercise.deleteData(viewHolder.adapterPosition)
                     dialog.dismiss()
                 }
                 mDialogView.findViewById<Button>(R.id.cancleBtn).setOnClickListener {
@@ -107,19 +108,52 @@ class CalenderFragment : Fragment() {
                     adapterExercise.notifyDataSetChanged()
                 }
             }
-
         }
-        val itemTouchHelper = ItemTouchHelper(simpleCallback)
-        itemTouchHelper.attachToRecyclerView(binding!!.recyclerViewExerciseInfo)
+        val itemTouchHelperExercise = ItemTouchHelper(simpleCallbackExercise)
+        itemTouchHelperExercise.attachToRecyclerView(binding!!.recyclerViewExerciseInfo)
         // 식단 정보 recyclerView
         binding!!.recyclerViewDietInfo.layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.recyclerViewDietInfo.addItemDecoration(DividerItemDecoration(this.requireContext(), LinearLayoutManager.VERTICAL))
         adapterDiet = DietInfoRecyclerViewAdapter(arrDiet)
-//        adapterDiet.itemClickListener = object : DietInfoRecyclerViewAdapter.OnItemClickListener {
-//            override fun OnItemClick(data: DietInfoData, position: Int) {
-//                adapterDiet.detailOnClick(position)
-//            }
-//        }
+        //운동 정보 click시 작동
+        adapterDiet.itemClickListener = object : DietInfoRecyclerViewAdapter.OnItemClickListener {
+            // 즐겨찾기 (별)
+            override fun OnStarClick(data: DietInfoData, position: Int) {
+                // 해당 데이터 check value 바꾸기(false -> true, true -> false) 데이터베이스
+                adapterDiet.favoritesSelected(position)
+            }
+            // 데이터 수정
+            override fun modifyData(data: DietInfoData, position: Int) {
+                // 수정하러 modifyExerciseInfoActivity로 intent
+            }
+        }
         binding!!.recyclerViewDietInfo.adapter = adapterDiet
+        // swipe
+        val simpleCallbackDiet = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_delete, null)
+                val mBuilder = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                val dialog = mBuilder.show()
+                mDialogView.findViewById<Button>(R.id.OKBtn).setOnClickListener {
+                    // 해당 데이터 delete 데이터베이스
+                    adapterDiet.deleteData(viewHolder.adapterPosition)
+                    dialog.dismiss()
+                }
+                mDialogView.findViewById<Button>(R.id.cancleBtn).setOnClickListener {
+                    dialog.dismiss()
+                    adapterDiet.notifyDataSetChanged()
+                }
+            }
+        }
+        val itemTouchHelperDiet = ItemTouchHelper(simpleCallbackDiet)
+        itemTouchHelperDiet.attachToRecyclerView(binding!!.recyclerViewDietInfo)
     }
 }

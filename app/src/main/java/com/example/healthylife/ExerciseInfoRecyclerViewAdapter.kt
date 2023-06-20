@@ -28,6 +28,11 @@ class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>):
         else items[pos].check = true
         notifyItemChanged(pos)
     }
+
+    fun deleteData(pos:Int){
+        items.removeAt(pos)
+        notifyItemRemoved(pos)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewHolder {
         val view = RowExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
