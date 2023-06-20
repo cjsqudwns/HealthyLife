@@ -1,6 +1,7 @@
 package com.example.healthylife
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.healthylife.databinding.FragmentCalenderBinding
+import java.util.Calendar
 import java.util.Date
 
 class CalenderFragment : Fragment() {
     var binding:FragmentCalenderBinding ?= null
     lateinit var adapterExercise: ExerciseInfoRecyclerViewAdapter
     var arr = arrayListOf<ExerciseInfoData>(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ"))
+    private val calendar = Calendar.getInstance()
+    private var currentMonth = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

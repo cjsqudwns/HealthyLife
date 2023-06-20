@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -91,13 +92,15 @@ class UserFragment : Fragment() {
             val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_nickname, null)
             val mBuilder = AlertDialog.Builder(requireContext())
                 .setView(mDialogView)
-            mBuilder.show()
+            val dialog = mBuilder.show()
             mDialogView.findViewById<Button>(R.id.OKBtn).setOnClickListener {
                 val nickname = mDialogView.findViewById<EditText>(R.id.NicknameEditText).text.toString()
                 FirebaseFirestore.getInstance().collection("UserInfo").document(auth.currentUser!!.uid)
                     .update("Nickname", nickname)
                     .addOnSuccessListener {
                         binding?.userID?.text = nickname
+                            Toast.makeText(requireContext(),"'"+nickname+"' 닉네임 변경 완료",Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
                     }
             }
         }
