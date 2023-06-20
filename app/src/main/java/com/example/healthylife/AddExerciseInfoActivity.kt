@@ -77,7 +77,7 @@ class AddExerciseInfoActivity : AppCompatActivity() {
         return timestamp
     }
 
-    fun manageBtn() {
+    private fun manageBtn() {
         binding.apply {
             cancleBtn.setOnClickListener {
                 finish()

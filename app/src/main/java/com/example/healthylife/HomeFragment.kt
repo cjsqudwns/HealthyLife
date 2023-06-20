@@ -61,6 +61,10 @@ class HomeFragment : Fragment() {
                 val intent = Intent(requireContext(), AddExerciseInfoActivity::class.java)
                 startActivity(intent)
             }
+            addDietBtn.setOnClickListener {
+                val intent = Intent(requireContext(), AddDietInfoActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
     //여기도 데베 연결 작업 해주긴 해야하나..?
