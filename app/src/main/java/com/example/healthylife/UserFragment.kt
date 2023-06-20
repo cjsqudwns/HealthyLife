@@ -99,7 +99,7 @@ class UserFragment : Fragment() {
                     .update("Nickname", nickname)
                     .addOnSuccessListener {
                         binding?.userID?.text = nickname
-                            Toast.makeText(requireContext(),"'"+nickname+"' 닉네임 변경 완료",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"'"+nickname+"' 닉네임 변경 완료",Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     }
             }
