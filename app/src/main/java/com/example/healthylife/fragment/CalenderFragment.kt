@@ -1,7 +1,6 @@
 package com.example.healthylife.fragment
 
 import android.os.Bundle
-import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +27,7 @@ class CalenderFragment : Fragment() {
     lateinit var adapterDiet: DietInfoRecyclerViewAdapter
     lateinit var auth:FirebaseAuth
     val exerciseInfoDataList: MutableList<ExerciseInfoData> = mutableListOf()
-    var arr = arrayListOf<ExerciseInfoData>(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ"))
+    var arr = arrayListOf<ExerciseInfoData>(ExerciseInfoData("2023-06-20", "13:00", "전신", 45, "ㅁㄴㅇㄹㅁㅇㄴㄹ",false))
     private val calendar = Calendar.getInstance()
     private var currentMonth = 0
 
@@ -74,7 +73,8 @@ class CalenderFragment : Fragment() {
                                         startTime = startTime,
                                         exercise_area = exerciseArea,
                                         minute = minute,
-                                        memo = memo
+                                        memo = memo,
+                                        check = false
                                     )
                                     exerciseInfoDataList.add(exerciseInfoData)
                                 }
