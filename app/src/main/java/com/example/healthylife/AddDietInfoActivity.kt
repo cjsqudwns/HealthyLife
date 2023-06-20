@@ -7,15 +7,20 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CalendarView
+import android.widget.Toast
+import com.example.healthylife.R
 import com.example.healthylife.databinding.ActivityAddDietInfoBinding
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Calendar
 
 class AddDietInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddDietInfoBinding
     lateinit var auth: FirebaseAuth
     var inputday:String? = null
-    var displayday:String? = null // 화면에 나오는 날짜
     var calenderMonth:Int = 0
     var calenderDay:Int = 1
     var calenderYear:Int = 2023
@@ -27,20 +32,6 @@ class AddDietInfoActivity : AppCompatActivity() {
         initSpinner()
         manageBtn()
     }
-    fun init(){
-        val selectedDateMillis = binding.calenderView.date
-        val selectedCalendar = Calendar.getInstance()
-        selectedCalendar.timeInMillis = selectedDateMillis
-        setInputDay(binding.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
-        auth = FirebaseAuth.getInstance()
-        displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
-        binding.selectedDay.text = displayday
-        binding.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
-            setInputDay(calendarView, year, month, day)
-            displayday = calenderYear.toString() + "년 " + calenderMonth.toString() + "월 " + calenderDay.toString() + "일"
-            binding.selectedDay.text = displayday.toString()
-        }
-    }
     fun setInputDay(calendarView: CalendarView, year:Int, month:Int, day:Int){
         calenderMonth = month+1
         calenderDay = day
@@ -48,13 +39,79 @@ class AddDietInfoActivity : AppCompatActivity() {
         inputday = year.toString() + String.format("%02d", month+1)+String.format("%02d", day)
         Log.d("TAG", inputday.toString())
     }
-    private fun manageBtn(){
+    fun init(){
+        val selectedDateMillis = binding.calenderView.date
+        val selectedCalendar = Calendar.getInstance()
+        selectedCalendar.timeInMillis = selectedDateMillis
+        setInputDay(binding.calenderView, selectedCalendar.get(Calendar.YEAR), selectedCalendar.get(Calendar.MONTH), selectedCalendar.get(Calendar.DAY_OF_MONTH))
+        auth = FirebaseAuth.getInstance()
+        binding.calenderView.setOnDateChangeListener { calendarView, year, month, day ->
+            setInputDay(calendarView, year, month, day)
+        }
+    }
+    fun getStartTime(): Timestamp {
+        var hours = Integer.parseInt(binding.spinnerStartHour.selectedItem.toString())
+        val minutes = Integer.parseInt(binding.spinnerStartMinute.selectedItem.toString())
+        if(binding.spinnerStartAmpm.selectedItem as String == "오후"){
+            hours +=12
+        }
+        val temp = LocalDateTime.of(calenderYear, calenderMonth, calenderDay, hours, minutes)
+        val timestamp = Timestamp(temp.toEpochSecond(ZoneOffset.ofHours(9)), 0)
+        return timestamp
+    }
+    private fun manageBtn() {
         binding.apply {
             cancleBtn.setOnClickListener {
                 finish()
             }
             saveBtn.setOnClickListener {
-                //파이어베이스 연동
+                val data = hashMapOf(
+                    "startTime" to getStartTime(),
+                    "dietPart" to binding.spinnerDietPart.selectedItem.toString(),
+                    "calrorie" to binding.EditeTextCalorie.text.toString().toInt(),
+                    "tansu" to binding.tansu.text.toString().toInt(),
+                    "protein" to binding.protein.text.toString().toInt(),
+                    "fat" to binding.fat.text.toString().toInt(),
+                    "memoFood" to binding.memoFood.text.toString()
+                )
+                val data2 = hashMapOf(
+                    "calrorie" to binding.EditeTextCalorie.text.toString().toInt()
+                )
+                val collectionRef = FirebaseFirestore.getInstance().collection("UserInfo")
+                val documentRef = collectionRef.document(auth.currentUser!!.uid)
+                if(inputday != null){
+                    val todayCollectionRef = documentRef.collection("DietInfo")
+                    todayCollectionRef
+                        .document(inputday!!).collection(binding.spinnerDietPart.selectedItem.toString()).get()
+                        .addOnSuccessListener { querySnapshot ->
+                            val documentCount = querySnapshot.size()
+                            todayCollectionRef
+                                .document(inputday!!).collection(binding.spinnerDietPart.selectedItem.toString()).document((documentCount+1).toString())
+                                .set(data)
+                                .addOnFailureListener {
+                                    Log.d("TAG", it.message.toString())
+                                }
+                        }
+                    todayCollectionRef.document(inputday!!).get().addOnSuccessListener {
+                        if(it.exists()){
+                            val fieldValue = it.getLong("calrorie")
+                            if(fieldValue != null){
+                                todayCollectionRef.document(inputday!!).update("calrorie",binding.EditeTextCalorie.text.toString()+fieldValue)
+                            }
+                            else{
+                                todayCollectionRef.document(inputday!!).set(data2)
+                            }
+                        }
+                        else{
+                            todayCollectionRef.document(inputday!!).set(data2)
+                        }
+                    }
+                }
+                else{
+                    Log.d("TAG","inputday 비동기화 오류")
+                }
+                Toast.makeText(this@AddDietInfoActivity,"저장완료", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }

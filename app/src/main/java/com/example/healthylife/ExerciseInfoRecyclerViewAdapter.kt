@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.healthylife.databinding.RowExerciseBinding
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
 
 class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>): RecyclerView.Adapter<ExerciseInfoRecyclerViewAdapter.ViewHolder>(){
     interface OnItemClickListener{
-        fun OnStarClick(data: ExerciseInfoData, position: Int)
+        fun OnStarClick(
+            fdata: ExerciseInfoData, position: Int)
         fun modifyData(data: ExerciseInfoData, position: Int)
     }
     var itemClickListener: OnItemClickListener?=null
@@ -27,6 +26,11 @@ class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>):
         if(items[pos].check) items[pos].check = false
         else items[pos].check = true
         notifyItemChanged(pos)
+    }
+
+    fun deleteData(pos:Int){
+        items.removeAt(pos)
+        notifyItemRemoved(pos)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewHolder {
         val view = RowExerciseBinding.inflate(LayoutInflater.from(parent.context), parent, false)

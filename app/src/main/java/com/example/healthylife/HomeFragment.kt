@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.healthylife.AddDietInfoActivity
 import com.example.healthylife.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {

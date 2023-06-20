@@ -107,10 +107,14 @@ class AddExerciseInfoActivity : AppCompatActivity() {
                             }
                     }
                     documentRef.get().addOnSuccessListener {
+
                         if(it.exists()){
                             val fieldValue = it.getLong("ExerciseTime")
                             if(fieldValue != null){
-                                todayCollectionRef.document(inputday!!).update("ExerciseTime",getExerciseTime()+fieldValue)
+                                if(fieldValue >=60){
+                                    todayCollectionRef.document(inputday!!).update("ExerciseTime",60)
+                                }
+                                else todayCollectionRef.document(inputday!!).update("ExerciseTime",getExerciseTime()+fieldValue)
                             }
                             else{
                                 todayCollectionRef.document(inputday!!).set(data2)
