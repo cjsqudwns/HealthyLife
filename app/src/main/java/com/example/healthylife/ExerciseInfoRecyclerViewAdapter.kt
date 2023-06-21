@@ -18,9 +18,6 @@ class ExerciseInfoRecyclerViewAdapter (val items:MutableList<ExerciseInfoData>):
     var itemClickListener: OnItemClickListener?=null
     inner class ViewHolder(val binding: RowExerciseBinding): RecyclerView.ViewHolder(binding.root){
         init{
-            binding.entireFrame.setOnClickListener{
-                itemClickListener!!.modifyData(items[adapterPosition], adapterPosition)
-            }
             binding.favorites.setOnClickListener{
                 itemClickListener!!.OnStarClick(items[adapterPosition], adapterPosition)
             }
